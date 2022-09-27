@@ -8,7 +8,7 @@
   <tr>
     <td>{{str(count)}}</td>
     % count += 1
-    <td>{{str(item['desc'])}}</td>
+    <td>{{str(item['description'])}}</td>
     <td><a href="/edit/{{str(item['id'])}}">edit</a></td>
     <td><a href="/delete/{{str(item['id'])}}">x</a></td>
   </tr>

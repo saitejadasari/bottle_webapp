@@ -1,7 +1,5 @@
 from bottle import default_app, route, template, get, post, request, redirect
-import sqlite3
-import database
-connection = sqlite3.connect("shopping_list.db")
+import sql_database as database
 
 @route('/hello')
 def hello_world():
@@ -37,7 +35,7 @@ def get_edit(id):
         redirect('/list')
     else:
         item = items[0]
-        item_id, description = item["id"], item["desc"]
+        item_id, description = item["id"], item["description"]
         return template('edit_item.tpl', id=id, description=description)
 
 @post('/edit/<id>')
