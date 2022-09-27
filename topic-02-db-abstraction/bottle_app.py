@@ -1,0 +1,50 @@
+from bottle import default_app, route, template, get, post, request, redirect
+import sqlite3
+import database
+connection = sqlite3.connect("shopping_list.db")
+
+@route('/hello')
+def hello_world():
+    return 'Hello from the otherside!!'
+
+
+@route('/')
+@route('/list')
+def get_list():
+    rows = database.get_items()
+    return template("shopping_list.tpl", name="Dr. DeLozier", shopping_list=rows)
+
+@get('/add')
+def get_add():
+    return template('shopping_list.tpl')
+
+
+@post('/add')
+def post_add():
+    description = request.forms.get("description")
+    database.add_item(description)
+    redirect('/list')
+
+@route('/delete/<id>')
+def get_delete(id):
+    database.delete_item(id)
+    redirect('/list')
+
+@get('/edit/<id>')
+def get_edit(id):
+    items = database.get_items(id)
+    if len(items) != 1:
+        redirect('/list')
+    else:
+        item = items[0]
+        item_id, description = item["id"], item["desc"]
+        return template('edit_item.tpl', id=id, description=description)
+
+@post('/edit/<id>')
+def post_edit(id):
+    description = request.forms.get("description")
+    database.update_item(id, description)
+    redirect('/list')
+
+
+application = default_app()
