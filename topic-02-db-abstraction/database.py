@@ -11,12 +11,17 @@ def get_items(id=None):
         query = f"select id, description from list where id={id}"
     rows = cursor.execute(query)
     rows = list(rows)
-    rows = [ {'id':row[0] ,'desc':row[1]} for row in rows ]
+    rows = [ {'id':row[0] ,'description':row[1]} for row in rows ]
     return rows
 
 def add_item(description):
     cursor = connection.cursor()
     cursor.execute(f"insert into list (description) values('{description}')")
+    connection.commit()
+
+def add_item(description, quantity):
+    cursor = connection.cursor()
+    cursor.execute(f"insert into list (description, quantity) values('{description}', '{quantity}')")
     connection.commit()
 
 def delete_item(id):
@@ -43,7 +48,7 @@ def test_get_items():
     assert 'id' in items[0].keys()
     assert 'desc' in items[0].keys()
     assert type(items[0]['id']) is int
-    assert type(items[0]['desc']) is str
+    assert type(items[0]['description']) is str
     pass
 
 def test_add_item():
@@ -52,7 +57,7 @@ def test_add_item():
     add_item(desc)
     items = get_items()
     item = items[-1]
-    assert desc == item["desc"]
+    assert desc == item["description"]
     pass
 
 def test_delete_item():
@@ -66,7 +71,7 @@ def test_delete_item():
     new_items = get_items()
     assert len(items) > len(new_items)
     for i in new_items:
-        assert desc != i["desc"]
+        assert desc != i["description"]
     pass
 
 
@@ -76,7 +81,7 @@ def test_update_item():
     add_item(desc)
     items = get_items()
     item = items[-1]
-    id, desc = item["id"], item["desc"]
+    id, desc = item["id"], item["description"]
     new_desc = desc.replace("1", "9").replace(".", ",")
     update_item(id, new_desc)
     new_items = get_items()
@@ -84,9 +89,9 @@ def test_update_item():
     new_found = False
     for i in new_items:
         if i["id"] == int(id):
-            assert new_desc == i["desc"]
+            assert new_desc == i["description"]
             new_found = True
-        assert i["desc"] != desc
+        assert i["description"] != desc
     assert new_found
 
 

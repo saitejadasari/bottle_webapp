@@ -1,30 +1,32 @@
 # database.py - functions for managing database
 
-from peewee import SqliteDatabase, Model, CharField
+from peewee import SqliteDatabase, Model, CharField, IntegerField
 
-db = SqliteDatabase('peewee_shopping_list.db')
+db = SqliteDatabase('shopping_list.db')
 
-class Item(Model):
+class List(Model):
     description = CharField()
+    quantity = IntegerField()
 
     class Meta:
         database = db
 
 def get_items(id=None):
     if id == None:
-        items = Item.select()
+        items = List.select()
     else:
-        items = Item.select().where(Item.id == int(id))
-    items = [{'id':item.id, 'description':item.description} for item in items]
+        items = List.select().where(List.id == int(id))
+    print("items in peewee", items)
+    items = [{'id':item.id, 'description':item.description, 'quantity': item.quantity} for item in items]
     return items
 
-def add_item(description):
-    Item.create(description=description)
+def add_item(description, quantity):
+    List.create(description=description, quantity=quantity)
 
 def delete_item(id):
-    q = Item.delete().where(Item.id == int(id))
+    q = List.delete().where(List.id == int(id))
     q.execute()
 
 def update_item(id, description):
-    q = Item.update({Item.description: description}).where(Item.id == int(id))
+    q = List.update({List.description: description}).where(List.id == int(id))
     q.execute()
