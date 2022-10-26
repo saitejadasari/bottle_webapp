@@ -12,21 +12,28 @@ class List(Model):
         database = db
 
 def get_items(id=None):
+    # db.connect()
     if id == None:
         items = List.select()
     else:
         items = List.select().where(List.id == int(id))
-    print("items in peewee", items)
+    db.close()
     items = [{'id':item.id, 'description':item.description, 'quantity': item.quantity} for item in items]
     return items
 
 def add_item(description, quantity):
+    # db.connect()
     List.create(description=description, quantity=quantity)
+    db.close()
 
 def delete_item(id):
+    # db.connect()
     q = List.delete().where(List.id == int(id))
     q.execute()
+    db.close()
 
 def update_item(id, description):
+    # db.connect()
     q = List.update({List.description: description}).where(List.id == int(id))
     q.execute()
+    db.close()

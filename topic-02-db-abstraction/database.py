@@ -21,7 +21,7 @@ def add_item(description):
 
 def add_item(description, quantity):
     cursor = connection.cursor()
-    cursor.execute(f"insert into list (description, quantity) values('{description}', '{quantity}')")
+    cursor.execute(f"insert into list (description, quantity) values('{description}', {quantity})")
     connection.commit()
 
 def delete_item(id):

@@ -3,6 +3,7 @@ import dataset
 db = dataset.connect("sqlite:///shopping_list.db")
 
 def get_items(id=None):
+    db.connect(reuse_if_open=True)
     table = db['list']
     items = []
     if id:
@@ -11,6 +12,7 @@ def get_items(id=None):
     else:
         items = table.find()
         items = [dict(i) for i in items]
+    db.close()
     return items
 
 
@@ -21,6 +23,7 @@ def add_item(description, quantity):
         item = { "description": description, "quantity": int(quantity)}
         table.insert(item)
         db.commit()
+        db.close()
     except:
         db.rollback()
 
@@ -30,6 +33,7 @@ def delete_item(id):
         table = db['list']
         table.delete(id=int(id))
         db.commit()
+        db.close()
     except Exception as ex:
         print(ex)
         db.rollback()
@@ -40,13 +44,14 @@ def update_item(id, description):
         table = db['list']
         data = dict(id=int(id), description=description)
         table.upsert(data, ['id'])
+        db.close()
     except Exception as ex:
         print(ex)
         db.rollback()
 
 
-if __name__ == "__main__":
-    print(get_items())
+# if __name__ == "__main__":
+#     print(get_items())
     # add_item("french fries", 10)
     # delete_item(4)
 

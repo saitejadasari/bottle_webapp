@@ -44,9 +44,9 @@ print("Topic in template", topic_id)
 
 <p display='inline'>
 <p>Topics</p>
-<a href="https://saitejad.pythonanywhere.com/2/list">Direct SQL</a>
-<a href="https://saitejad.pythonanywhere.com/3/list">Dataset</a>
-<a href="https://saitejad.pythonanywhere.com/4/list">Peewee</a>
+<a href="/2/redirect">Direct SQL</a>
+<a href="/4/redirect">Peewee</a>
+<a href="/3/redirect">Dataset</a>
 </p>
 </body>
 </html>

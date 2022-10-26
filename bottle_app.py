@@ -86,4 +86,8 @@ def post_edit(topic, id):
     redirect('/'+ topic +'/list')
 
 
+@route('/<topic>/redirect')
+def redirect_link(topic):
+    redirect('/'+ topic + '/list')
+
 application = default_app()
