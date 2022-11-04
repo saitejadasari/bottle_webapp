@@ -3,7 +3,6 @@ import dataset
 db = dataset.connect("sqlite:///shopping_list.db")
 
 def get_items(id=None):
-    db.connect(reuse_if_open=True)
     table = db['list']
     items = []
     if id:
@@ -12,7 +11,6 @@ def get_items(id=None):
     else:
         items = table.find()
         items = [dict(i) for i in items]
-    db.close()
     return items
 
 
