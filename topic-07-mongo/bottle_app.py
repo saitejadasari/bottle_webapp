@@ -1,8 +1,7 @@
-from bottle import default_app, route, template, get, post, request, redirect, run
+from bottle import default_app, route, template, get, post, request, redirect
 import sys
 
 import mongo_database as database
-
 
 def topic_finder(topic):
     if topic == 1 or topic == 2:
@@ -20,22 +19,17 @@ def topic_finder(topic):
         print("path is ", sys.path)
         import peewee_database as database
         return database
-    elif topic == 5:
-        import mongo_database as database
-        return database
 
 
 @route('/hello')
 def hello_world():
     return 'Hello from the otherside!!'
 
-
 @route('/')
 @route('/list')
 def get_list():
     rows = database.get_items()
     return template("shopping_list.tpl", name="Sai teja", shopping_list=rows, topic=2)
-
 
 @get('/<topic>/list')
 def get_list(topic):
@@ -44,7 +38,6 @@ def get_list(topic):
     rows = db.get_items()
     print("Topic ", topic)
     return template("shopping_list.tpl", name="Sai Teja", shopping_list=rows, topic=topic)
-
 
 @get('/add')
 def get_add():
@@ -62,16 +55,14 @@ def post_add(topic):
     topic = topic if topic else 2
     db = topic_finder(int(topic))
     db.add_item(description, quantity)
-    redirect('/' + topic + '/list')
-
+    redirect('/'+ topic +'/list')
 
 @route('/delete/<topic>/<id>')
 def get_delete(topic, id):
     topic = topic if topic else 2
     db = topic_finder(int(topic))
     db.delete_item(id)
-    redirect('/' + topic + '/list')
-
+    redirect('/'+ topic +'/list')
 
 @get('/edit/<topic>/<id>')
 def get_edit(topic, id):
@@ -79,12 +70,11 @@ def get_edit(topic, id):
     db = topic_finder(int(topic))
     items = db.get_items(id)
     if len(items) != 1:
-        redirect('/' + topic + '/list')
+        redirect('/'+ topic +'/list')
     else:
         item = items[0]
         item_id, description = item["id"], item["description"]
         return template('edit_item.tpl', id=id, description=description, topic=topic)
-
 
 @post('/edit/<topic>/<id>')
 def post_edit(topic, id):
@@ -92,12 +82,11 @@ def post_edit(topic, id):
     topic = topic if topic else 2
     db = topic_finder(int(topic))
     db.update_item(id, description)
-    redirect('/' + topic + '/list')
+    redirect('/'+ topic +'/list')
 
 
 @route('/<topic>/redirect')
 def redirect_link(topic):
-    redirect('/' + topic + '/list')
+    redirect('/'+ topic + '/list')
 
-
-run(host='localhost', port=8080)
+application = default_app()
