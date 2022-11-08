@@ -9,7 +9,7 @@ def get_index():
 @route('/list')
 def get_list():
     items = get_items()
-    return template("shopping_list.tpl", name="Dr. DeLozier", shopping_list=items)
+    return template("shopping_list.tpl", name="Saiteja", shopping_list=items)
 
 @post('/add')
 def post_add():
